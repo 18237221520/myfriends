@@ -1,33 +1,42 @@
-/*多态*/
-//定义接口
-interface Animal{
-	void shou();//定义抽象方法
-}
-//定义Cat类实现Animal接口
-class Cat implements Animal{
-	//实现shou()方法
-	public void shou(){
-		System.out.println("喵喵~~~");
+//定义Ticket1类实现Runnable接口
+class Ticket1 implements Runnable
+{
+	private int tickets=10;
+	public void run(){
+		while (true)
+		{
+			saleTicket();
+			if (tickets<=0)
+			{
+				break;
+			}
+		}
+	}
+	//定义一个同步方法saleTicket()
+	private synchronized void saleTicket(){
+		if (tickets>0)
+		{
+			try
+			{
+				Thread.sleep(10);        //经过的线程休眠10毫秒
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			System.out.println(Thread.currentThread().getName()+"---卖出的票"
+			+tickets--);
+		}
 	}
 }
-//定义Dog类实现Animal接口
-class Dog implements Animal{
-	//实现shou方法
-	public void shou(){
-		System.out.println("汪汪···");
+public class Example13
+{
+	public static void main(String[] args) {
+		Ticket1 ticket=new Ticket1();      //创建Ticket1对象
+		//创建并开启四个线程
+		new Thread(ticket,"线程一").start();
+		new Thread(ticket,"线程二").start();
+		new Thread(ticket,"线程三").start();
+		new Thread(ticket,"线程四").start();
 	}
-}
-//定义测试类
-public class Example13{
-	public static void main(String[] args){
-		Animal cat=new Cat();
-		Animal dog=new Dog();
-		animalshou(cat);
-		animalshou(dog);
-	}
-	//定义静态的animalshou方法，接受Animal类型参数
-	public static void animalshou(Animal an){
-		an.shou();//调用实参的shou方法
-	}
-	
 }
